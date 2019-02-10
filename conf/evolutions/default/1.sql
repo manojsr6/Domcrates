@@ -16,6 +16,15 @@ create table domain (
   constraint pk_domain primary key (domain_id)
 );
 
+create table domain_response (
+  id                            integer not null,
+  domain_name                   varchar(255),
+  expiry_date                   datetime(6),
+  year                          integer not null,
+  month                         integer not null,
+  day                           integer not null
+);
+
 create table test_ebean (
   user_id                       integer auto_increment not null,
   name                          varchar(255),
@@ -50,6 +59,8 @@ create table watch_list (
 # --- !Downs
 
 drop table if exists domain;
+
+drop table if exists domain_response;
 
 drop table if exists test_ebean;
 

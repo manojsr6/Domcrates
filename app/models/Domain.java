@@ -10,32 +10,37 @@ import play.data.validation.Constraints;
 
 @Entity
 public class Domain  extends Model{
+	
 	@Id
 	@GeneratedValue
+	@Column(name="domain_id")
 	private int domain_id;
 	
 	
 	@Constraints.Email
+	@Column(name="registered_email")
 	private String registered_email;
 	
-	@Column(nullable = false)
+	@Column(name="domain_name",nullable = false)
 	private String domain_name;
 	
+	@Column(name="country")
 	private String country;
 	
-	@Column(nullable = false)
+	
+	@Column(name="created_date",nullable = false)
 	private Date created_date;
 	
-	@Column(nullable = false)
+	@Column(name="website_url",nullable = false)
 	private String website_url ;
 	
-	@Column(nullable = false)
+	@Column(name="updated_date",nullable = false)
 	private Date updated_date;
 	
-	@Column(nullable = false)
+	@Column(name="expiry_date",nullable = false)
 	private Date expiry_date;
 	
-	@Column(nullable = false)
+	@Column(name="registrar_name",nullable = false)
 	private String registrar_name;
 	
 	@Transient

@@ -3,6 +3,7 @@ package services;
 import dao.DomainDao;
 import models.*;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -14,7 +15,7 @@ public class DomainService {
 	DomainDao domainDao= new DomainDao();
 	
 	
-	public List<Domain> fetchDomainByemail(String primary_email,int offset,int limit)
+	public List<Domain> fetchDomainByemail(String primary_email,int offset,int limit) throws ParseException
 	{
 		List<Domain> domainList= domainDao.fetchByPrimaryEmail(primary_email, offset, limit);
 		
