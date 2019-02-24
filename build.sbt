@@ -25,6 +25,8 @@ libraryDependencies ++= Seq(
 )
 libraryDependencies ++= Seq(evolutions, jdbc)
 
+libraryDependencies += "com.auth0" % "java-jwt" % "3.7.0"
+
 
 // Make verbose tests
 testOptions in Test := Seq(Tests.Argument(TestFrameworks.JUnit, "-a", "-v"))

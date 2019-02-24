@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import javax.inject.Inject;
+
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import dao.DomainDao;
 import dao.UserDao;
@@ -15,11 +18,15 @@ import models.Domain;
 import models.RequestBody;
 import models.TestEbean;
 import models.User;
+import play.Logger;
 import play.libs.Json;
 import play.mvc.*;
 import services.DomainService;
 import services.UserService;
 import services.WatchListService;
+import util.JwtControllerHelper;
+import util.JwtControllerHelperImpl;
+import util.VerifiedJwt;
 import views.html.*;
 
 /**
@@ -33,6 +40,9 @@ public class HomeController extends Controller {
 	//DomainDao domainDao= new DomainDao();
 	DomainService domainService= new DomainService();
 	WatchListService watchListService= new WatchListService();
+	
+	@Inject
+    private JwtControllerHelper jwtControllerHelper;
     /**
      * An action that renders an HTML page with a welcome message.
      * The configuration in the <code>routes</code> file means that
@@ -81,20 +91,53 @@ public class HomeController extends Controller {
 	   
    }
    
-   public Result fetchDomain(String email, int offset, int limit) throws SQLException, InterruptedException, ExecutionException, IOException, ParseException{
-	   return ok(Json.toJson(domainService.fetchDomainByemail(email, offset, limit)));
+   public Result fetchDomain(int offset, int limit) throws SQLException, InterruptedException, ExecutionException, IOException, ParseException{
+	   return jwtControllerHelper.verify(request(), res -> {
+           if (res.left.isPresent()) {
+               return forbidden(res.left.get().toString());
+           }
+           VerifiedJwt verifiedJwt = res.right.get();
+           Logger.debug("{}", verifiedJwt);
+
+           ObjectNode result = Json.newObject();
+           try {
+			return ok(Json.toJson(domainService.fetchDomainByemail(verifiedJwt.getUserId(), offset, limit)));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+           return forbidden();
+       });
    }
    
    public Result addDomain() throws SQLException, InterruptedException, ExecutionException, IOException, ParseException{
-	   JsonNode json_node= request().body().asJson();
-	   if(json_node == null)
-	   {
-		   return badRequest("Expected proper json data");
-	   }
-	   RequestBody new_domain= Json.fromJson(json_node,RequestBody.class);
-	   watchListService.add(new_domain.getDomain_name(), new_domain.getPrimary_email());
-	   return ok(Json.toJson(new_domain));
-	   
+	   return jwtControllerHelper.verify(request(), res -> {
+           if (res.left.isPresent()) {
+               return forbidden(res.left.get().toString());
+           }
+           VerifiedJwt verifiedJwt = res.right.get();
+           Logger.debug("{}", verifiedJwt);
+           
+           JsonNode json_node= request().body().asJson();
+    	   if(json_node == null)
+    	   {
+    		   return badRequest("Expected proper json data");
+    	   }
+    	   RequestBody new_domain= Json.fromJson(json_node,RequestBody.class);
+    	   try {
+			watchListService.add(new_domain.getDomain_name(), new_domain.getPrimary_email());
+    	   } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	   return ok(Json.toJson(new_domain));
+       });
    }
    
    public Result fetchWatchList(int id, int offset, int limit) throws SQLException, InterruptedException, ExecutionException, IOException, ParseException{

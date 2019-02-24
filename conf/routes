@@ -6,13 +6,18 @@
 GET     /                           controllers.HomeController.index
 POST 	/findByEmail				controllers.HomeController.findByEmail
 POST  /api/1.0/portal/mobile/create_user controllers.HomeController.createUser
-GET  /api/1.0/portal/mobile/fetch_domain/:email/:offset/:limit  controllers.HomeController.fetchDomain(email,offset:Integer,limit:Integer)
+GET  /api/1.0/portal/mobile/fetch_domain/:offset/:limit  controllers.HomeController.fetchDomain(offset:Integer,limit:Integer)
 POST  /api/1.0/portal/mobile/add_watchList    controllers.HomeController.addDomain
 GET  /api/1.0/portal/mobile/fetch_watchList/:id/:offset/:limit		controllers.HomeController.fetchWatchList(id: Integer, offset:Integer,limit:Integer)
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
 GET     /message                    controllers.AsyncController.message
+
++noJwtFilter
+POST     /login                     controllers.OauthController.login()
+GET 	/requires-jwt				controllers.OauthController.requiresJwt
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

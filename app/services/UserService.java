@@ -140,38 +140,42 @@ public class UserService{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		JsonElement domain_name= search_result.get("domain_name");
-		System.out.println("\n "+search_result);
+		int status= search_result.get("status").getAsInt();
 		JsonElement domain_registered= search_result.get("domain_registered");
-		System.out.println("\n "+domain_registered);
-		if(search_result.get("domain_registered").toString().replaceAll("\\\"", "").equalsIgnoreCase("Yes"))
+		if(status == 1)
 		{
-			JsonElement created_date= search_result.get("create_date"); 
-			Date createdDate= sdf.parse(created_date.toString().replaceAll("\"", ""));
-			
-			JsonElement expiry_date= search_result.get("expiry_date");
-			Date expiryDate= sdf.parse(expiry_date.toString().replaceAll("\"", ""));
-			
-			JsonElement update_date= search_result.get("update_date");
-			Date updatedDate= sdf.parse(update_date.toString().replaceAll("\"", ""));
-			
-			JsonObject domain_registrar= search_result.get("domain_registrar").getAsJsonObject();
-			JsonElement registrar_name= domain_registrar.get("registrar_name");
-			JsonElement website_url= domain_registrar.get("website_url");
-			
-//			JsonObject registrant_contact= search_result.get("registrant_contact").getAsJsonObject();
-//			JsonElement country_name= registrant_contact.get("country_name");
-			
-			domainObject.setDomain_name(domain_name.toString().replaceAll("\\\"", ""));
-			domainObject.setRegistered_email(primary_email);
-			domainObject.setRegistrar_name(registrar_name.toString().replaceAll("\\\"", ""));
-//			domainObject.setCountry(country_name.toString().replaceAll("\\\"", ""));
-			domainObject.setCreated_date(createdDate);
-			domainObject.setUpdated_date(updatedDate);
-			domainObject.setExpiry_date(expiryDate);
-			domainObject.setWebsite_url(website_url.toString().replaceAll("\\\"", ""));
-			
-			return domainObject;
+			if(search_result.get("domain_registered").toString().replaceAll("\\\"", "").equalsIgnoreCase("Yes"))
+			{
+				JsonElement created_date= search_result.get("create_date"); 
+				Date createdDate= sdf.parse(created_date.toString().replaceAll("\"", ""));
+				
+				JsonElement expiry_date= search_result.get("expiry_date");
+				Date expiryDate= sdf.parse(expiry_date.toString().replaceAll("\"", ""));
+				
+				JsonElement update_date= search_result.get("update_date");
+				Date updatedDate= sdf.parse(update_date.toString().replaceAll("\"", ""));
+				
+				JsonObject domain_registrar= search_result.get("domain_registrar").getAsJsonObject();
+				JsonElement registrar_name= domain_registrar.get("registrar_name");
+				JsonElement website_url= domain_registrar.get("website_url");
+				
+//				JsonObject registrant_contact= search_result.get("registrant_contact").getAsJsonObject();
+//				JsonElement country_name= registrant_contact.get("country_name");
+				
+				domainObject.setDomain_name(domain_name.toString().replaceAll("\\\"", ""));
+				domainObject.setRegistered_email(primary_email);
+				domainObject.setRegistrar_name(registrar_name.toString().replaceAll("\\\"", ""));
+//				domainObject.setCountry(country_name.toString().replaceAll("\\\"", ""));
+				domainObject.setCreated_date(createdDate);
+				domainObject.setUpdated_date(updatedDate);
+				domainObject.setExpiry_date(expiryDate);
+				domainObject.setWebsite_url(website_url.toString().replaceAll("\\\"", ""));
+				
+				return domainObject;
+			}
+			return null;
 		}
+		
 		else
 			return null;
 		
@@ -182,13 +186,10 @@ public class UserService{
 		Domain domain= new Domain();
 		for(int index = 0 ;index < domainNameList.size();index++)
 		{
-			System.out.println(domainNameList.get(index));
 			if(!domainNameList.get(index).equalsIgnoreCase("smaug.studio"))
 			 domain= getDomainDetails(domainNameList.get(index), primary_email);
-			System.out.println(domain);
 			if(domain != null)
 			{
-				System.out.println("Testing");
 				domainList.add(domain);
 			}
 			
@@ -211,10 +212,8 @@ public class UserService{
 		ArrayList<Domain> domainList= new ArrayList<Domain>();
 		domainNameList=fetchData(new_user.getPrimary_email());
 		
-		System.out.println(domainNameList);
 		domainList= fetchDomainDetails(domainNameList,new_user.getPrimary_email());
 		
-		System.out.println(domainNameList);
 		
 		if(!domainList.isEmpty())
 		{
@@ -224,6 +223,12 @@ public class UserService{
 		
 		return new_user;
 		
+	}
+	
+	public User validateCredentials(String email, String password)
+	{
+		User user= userdao.validateCredentials(email, password);
+		return user;
 	}
 	
 }

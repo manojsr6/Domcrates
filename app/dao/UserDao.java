@@ -27,6 +27,14 @@ public class UserDao {
 		
 	}
 	
+	public boolean checkPass(String plain_password, String hashed_password)
+	{
+		 if(BCrypt.checkpw(plain_password, hashed_password))
+			 return true;
+		 else
+			 return false;
+	}
+	
 	public List<User>findAll() throws SQLException{
 		DbConnection dbconnection= DbConnection.getConnection();
 		List<User> userList= new ArrayList<>();
@@ -94,6 +102,7 @@ public class UserDao {
 	public User create_user(User new_user) throws SQLException
 	{
 		new_user.setPassword(passEncrypt(new_user.getPassword()));
+		System.out.println("after encryption of password");
 		EbeanServer server = Ebean.getDefaultServer();
 		server.save(new_user);
 		return new_user;
@@ -111,5 +120,17 @@ public class UserDao {
 		EbeanServer server = Ebean.getDefaultServer();
 		User user= server.find(User.class).where().eq("user_id", id).findOne();
 		return user;
+	}
+	
+	public User validateCredentials(String email, String password)
+	{
+		EbeanServer server = Ebean.getDefaultServer();
+		User user= server.find(User.class).where().eq("primary_email", email).findOne();
+		if(checkPass(password, user.getPassword()))
+		{
+			return user;
+		}
+		else
+			return null;
 	}
 }
