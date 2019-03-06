@@ -102,7 +102,8 @@ public class UserDao {
 	public User create_user(User new_user) throws SQLException
 	{
 		new_user.setPassword(passEncrypt(new_user.getPassword()));
-		System.out.println("after encryption of password");
+		new_user.setVerified(false);
+		new_user.setActive(true);
 		EbeanServer server = Ebean.getDefaultServer();
 		server.save(new_user);
 		return new_user;
@@ -133,4 +134,32 @@ public class UserDao {
 		else
 			return null;
 	}
+	
+	public void updateUser(User user)
+	{
+		EbeanServer server = Ebean.getDefaultServer();
+		server.update(user);
+	}
+
+	public User validateForgotPasswordLink(String forgotPasswordToken)
+	{
+		EbeanServer server = Ebean.getDefaultServer();
+		User user= server.find(User.class).where().eq("forgotPasswordToken", forgotPasswordToken).findOne();
+		return user;
+	}
+	
+	public void resetPassword(User user)
+	{
+		user.setPassword(passEncrypt(user.getPassword()));
+		EbeanServer server= Ebean.getDefaultServer();
+		server.update(user);
+	}
+	
+	public void changePassword(User user)
+	{
+		user.setPassword(passEncrypt(user.getPassword()));
+		EbeanServer server= Ebean.getDefaultServer();
+		server.update(user);
+	}
+	
 }

@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -15,6 +16,7 @@ import com.typesafe.config.Config;
 
 import models.User;
 import play.mvc.*;
+import services.EmailService;
 import services.UserService;
 import util.JwtControllerHelper;
 import util.JwtControllerHelperImpl;
@@ -25,7 +27,7 @@ import play.libs.typedmap.TypedKey;
 
 public class OauthController extends Controller {
 	UserService userService= new UserService();
-	
+	EmailService emailService= new EmailService();
 	@Inject
     private JwtControllerHelper jwtControllerHelper;
 	
@@ -36,7 +38,7 @@ public class OauthController extends Controller {
 	        return ok("signed token: " + getSignedToken("1"));
 	    }
 	 
-	 public Result login() throws UnsupportedEncodingException {
+	 public Result login() throws UnsupportedEncodingException, IOException {
 	        JsonNode body = request().body().asJson();
 
 	        if (body == null) {
@@ -51,6 +53,8 @@ public class OauthController extends Controller {
 	        	{
 	        		ObjectNode result = Json.newObject();
 		            result.put("access_token", getSignedToken(user.getPrimary_email()));
+		            System.out.println("\n Inside Result: "+result);
+		            emailService.verificationLink(user.getPrimary_email(), "");
 		            return ok(result);
 	        	}
 	        	else

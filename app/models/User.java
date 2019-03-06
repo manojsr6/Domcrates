@@ -36,6 +36,9 @@ public class User extends Model {
 	@Column(nullable = false)
 	private  Boolean verified= false;
 	
+	@Column(nullable = true)
+	private  String forgotPasswordToken;
+	
 	public 	int getUser_id() {
 		return user_id;
 	}
@@ -84,5 +87,19 @@ public class User extends Model {
 		this.verified = verified;
 	}
 	
+	/**
+	 * @return the forgotPasswordToken
+	 */
+	public String getForgotPasswordToken() {
+		return forgotPasswordToken;
+	}
+
+	/**
+	 * @param forgotPasswordToken the forgotPasswordToken to set
+	 */
+	public void setForgotPasswordToken(String forgotPasswordToken) {
+		this.forgotPasswordToken = forgotPasswordToken;
+	}
+
 	public static final Finder<Long, User> find = new Finder<>(User.class);
 }

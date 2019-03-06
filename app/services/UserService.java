@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 
@@ -35,6 +36,7 @@ public class UserService{
 	
 	public UserDao userdao= new UserDao();
 	public DomainDao domaindao= new DomainDao();
+	public EmailService emailService= new EmailService();
 	
 	public JsonArray fetchDomainNames(String primary_email) throws InterruptedException, ExecutionException, IOException
 	{
@@ -218,6 +220,7 @@ public class UserService{
 		if(!domainList.isEmpty())
 		{
 			userdao.create_user(new_user);
+			emailService.verificationLink(new_user.getPrimary_email(), "");
 			domaindao.add_domain(domainList);
 		}
 		
@@ -229,6 +232,55 @@ public class UserService{
 	{
 		User user= userdao.validateCredentials(email, password);
 		return user;
+	}
+	
+	public Boolean forgotPasswordLink(String email)
+	{
+		User user= userdao.fetchUserByEmail(email);
+		if(user != null)
+		{
+			String forgotPasswordToken= UUID.randomUUID().toString();
+			user.setForgotPasswordToken(forgotPasswordToken);
+			userdao.updateUser(user);
+			return true;
+			
+		}
+		else
+			return false;
+	}
+	
+	public Boolean validateForgotPasswordLink(String forgotPasswordToken)
+	{
+		User user= userdao.validateForgotPasswordLink(forgotPasswordToken);
+		if(user != null)
+			return true;
+		else
+			return false;
+	}
+	
+	public void resetPassword(int userId,String new_password)
+	{
+		User user= userdao.fetchUserById(userId);
+		if(user != null)
+		{
+			user.setPassword(new_password);
+			userdao.resetPassword(user);
+		}
+	}
+	
+	public String changePassword(int userId, String old_password, String new_password)
+	{
+		User user= userdao.fetchUserById(userId);
+		if(user != null)
+		{
+			if(userdao.checkPass(old_password, user.getPassword()))
+			{
+				user.setPassword(new_password);
+				userdao.changePassword(user);
+				return "Changed the password";
+			}
+		}
+		return "Could not changed the password";
 	}
 	
 }

@@ -38,6 +38,7 @@ create table user (
   password                      varchar(255),
   active                        tinyint(1) not null,
   verified                      tinyint(1) not null,
+  forgot_password_token         varchar(255),
   constraint uq_user_primary_email unique (primary_email),
   constraint pk_user primary key (user_id)
 );

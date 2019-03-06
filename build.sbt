@@ -20,6 +20,9 @@ libraryDependencies += "mysql" % "mysql-connector-java" % "8.0.13"
 libraryDependencies += javaJdbc
 libraryDependencies += "com.google.code.gson" % "gson" % "2.8.5"
 libraryDependencies +="org.mindrot" % "jbcrypt" % "0.3m"
+libraryDependencies += "com.typesafe.play" %% "play-mailer" % "6.0.0"
+libraryDependencies += "com.typesafe.play" %% "play-mailer-guice" % "6.0.0"
+libraryDependencies += "com.sendgrid" % "sendgrid-java" % "4.3.0"
 libraryDependencies ++= Seq(
   ws
 )

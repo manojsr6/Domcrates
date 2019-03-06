@@ -144,5 +144,52 @@ public class HomeController extends Controller {
 	   System.out.println(id);
 	   return ok(Json.toJson(watchListService.fetchWatchListById(id, offset, limit)));
    }
+   
+   public Result forgotPasswordLink() throws SQLException, InterruptedException, ExecutionException, IOException, ParseException{
+	   JsonNode json_node= request().body().asJson();
+	   if(json_node == null)
+	   {
+		   return badRequest("Expected proper json data");
+	   }else
+	   {
+		   String email = json_node.findPath("email").textValue();
+		   userservice.forgotPasswordLink(email);
+		   return ok(Json.toJson(true));
+	   }
+   }
+   
+   public Result validateforgotPasswordLink(String forgotPasswordToken) throws SQLException, InterruptedException, ExecutionException, IOException, ParseException{
+		  userservice.forgotPasswordLink(forgotPasswordToken);
+		   return ok(Json.toJson(true));
+   }
+   
+   public Result resetPassword() throws SQLException, InterruptedException, ExecutionException, IOException, ParseException{
+	   JsonNode json_node= request().body().asJson();
+	   if(json_node == null)
+	   {
+		   return badRequest("Expected proper json data");
+	   }else
+	   {
+		   int userId = json_node.findPath("userId").intValue();
+		   String new_password = json_node.findPath("new_password").textValue();
+		   userservice.resetPassword(userId, new_password);
+		   return ok(Json.toJson(true));
+	   }
+   }
+   
+   public Result changePassword() throws SQLException, InterruptedException, ExecutionException, IOException, ParseException{
+	   JsonNode json_node= request().body().asJson();
+	   if(json_node == null)
+	   {
+		   return badRequest("Expected proper json data");
+	   }else
+	   {
+		   int userId = json_node.findPath("userId").intValue();
+		   String new_password= json_node.findPath("new_password").textValue();
+		   String old_password= json_node.findPath("old_password").textValue();
+		   userservice.changePassword(userId, old_password, new_password);
+		   return ok(Json.toJson(true));
+	   }
+   }
 
-}
+  }
