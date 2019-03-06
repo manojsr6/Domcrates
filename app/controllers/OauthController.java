@@ -53,8 +53,6 @@ public class OauthController extends Controller {
 	        	{
 	        		ObjectNode result = Json.newObject();
 		            result.put("access_token", getSignedToken(user.getPrimary_email()));
-		            System.out.println("\n Inside Result: "+result);
-		            emailService.verificationLink(user.getPrimary_email(), "");
 		            return ok(result);
 	        	}
 	        	else

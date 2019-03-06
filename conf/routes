@@ -13,6 +13,7 @@ PUT  /api/1.0/portal/mobile/forgotPasswordLink			controllers.HomeController.forg
 GET  /api/1.0/portal/mobile/forgotPasswordLinkValidation/:forgotPasswordToken  controllers.HomeController.validateforgotPasswordLink(forgotPasswordToken:String)
 POST  /api/1.0/portal/mobile/resetPassword				controllers.HomeController.resetPassword()
 POST /api/1.0/portal/mobile/changePassword				controllers.HomeController.changePassword()
+GET  /api/1.0/portal/mobile/validateActivationCode/:activationCode controllers.HomeController.validateActivationCode(activationCode:String)
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code

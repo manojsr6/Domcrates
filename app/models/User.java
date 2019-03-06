@@ -39,6 +39,18 @@ public class User extends Model {
 	@Column(nullable = true)
 	private  String forgotPasswordToken;
 	
+	@Column(nullable = true)
+	private  String emailVerificationToken;
+	
+	
+	public String getEmailVerificationToken() {
+		return emailVerificationToken;
+	}
+
+	public void setEmailVerificationToken(String emailVerificationToken) {
+		this.emailVerificationToken = emailVerificationToken;
+	}
+
 	public 	int getUser_id() {
 		return user_id;
 	}

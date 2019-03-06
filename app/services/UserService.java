@@ -198,16 +198,7 @@ public class UserService{
 		}
 		return domainList;
 	}
-	/**
-	 * This function is used create a user by fetching whole domain from whoxy api's
-	 * @param new_user
-	 * @return
-	 * @throws SQLException
-	 * @throws InterruptedException
-	 * @throws ExecutionException
-	 * @throws IOException
-	 * @throws ParseException
-	 */
+	
 	public User create_user(User new_user) throws SQLException, InterruptedException, ExecutionException, IOException, ParseException
 	{
 		ArrayList<String> domainNameList= new ArrayList<String>();
@@ -219,8 +210,9 @@ public class UserService{
 		
 		if(!domainList.isEmpty())
 		{
+			new_user.setEmailVerificationToken(UUID.randomUUID().toString());
 			userdao.create_user(new_user);
-			emailService.verificationLink(new_user.getPrimary_email(), "");
+			emailService.activationLink(new_user.getPrimary_email(), new_user.getEmailVerificationToken());
 			domaindao.add_domain(domainList);
 		}
 		
@@ -234,7 +226,7 @@ public class UserService{
 		return user;
 	}
 	
-	public Boolean forgotPasswordLink(String email)
+	public Boolean forgotPasswordLink(String email) throws IOException
 	{
 		User user= userdao.fetchUserByEmail(email);
 		if(user != null)
@@ -242,6 +234,7 @@ public class UserService{
 			String forgotPasswordToken= UUID.randomUUID().toString();
 			user.setForgotPasswordToken(forgotPasswordToken);
 			userdao.updateUser(user);
+			emailService.forgotPasswordLink(user.getPrimary_email(), forgotPasswordToken);
 			return true;
 			
 		}
@@ -252,8 +245,12 @@ public class UserService{
 	public Boolean validateForgotPasswordLink(String forgotPasswordToken)
 	{
 		User user= userdao.validateForgotPasswordLink(forgotPasswordToken);
-		if(user != null)
+		if(user != null && user.getForgotPasswordToken().equals(forgotPasswordToken))
+		{
+			user.setForgotPasswordToken(null);
+			userdao.updateUser(user);
 			return true;
+		}
 		else
 			return false;
 	}
@@ -268,7 +265,7 @@ public class UserService{
 		}
 	}
 	
-	public String changePassword(int userId, String old_password, String new_password)
+	public String changePassword(int userId, String old_password, String new_password) throws IOException
 	{
 		User user= userdao.fetchUserById(userId);
 		if(user != null)
@@ -277,10 +274,25 @@ public class UserService{
 			{
 				user.setPassword(new_password);
 				userdao.changePassword(user);
+				emailService.resetPasswordConfirmationMail(user.getPrimary_email());
 				return "Changed the password";
 			}
 		}
 		return "Could not changed the password";
+	}
+	
+	public Boolean validateActivationCode(String activationCode)
+	{
+		User user= userdao.validateActivationLink(activationCode);
+		if(user != null && user.getEmailVerificationToken().equals(activationCode))
+		{
+			user.setVerified(true);
+			user.setEmailVerificationToken(null);
+			userdao.updateUser(user);
+			return true;
+		}
+		else 
+			return false;
 	}
 	
 }

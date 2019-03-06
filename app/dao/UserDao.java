@@ -53,23 +53,6 @@ public class UserDao {
 		return userList;
 	}
 	
-//	public User findOne(String primary_email) throws SQLException {
-//		DbConnection dbconnection= DbConnection.getConnection();
-//		User user= new User();
-//		String query= "select * from user_master_table where primary_email=?;";
-//		PreparedStatement preparedStatement = dbconnection.conn.prepareStatement(query);
-//		preparedStatement.setString(1, primary_email.toString());
-//		ResultSet rs= preparedStatement.executeQuery();
-//		while(rs.next()) {
-//			user.setUser_id(rs.getString("user_id"));
-//			user.setPrimary_email(rs.getString("primary_email"));
-//			user.setName(rs.getString("name"));
-//			user.setActive(rs.getBoolean("active"));
-//			user.setVerified(rs.getBoolean("verified"));
-//		}
-//		return user;
-//	}
-	
 	public void bulkDomainInsert(ArrayList<Domain>domainList) throws SQLException
 	{
 		DbConnection dbconnection= DbConnection.getConnection();
@@ -160,6 +143,13 @@ public class UserDao {
 		user.setPassword(passEncrypt(user.getPassword()));
 		EbeanServer server= Ebean.getDefaultServer();
 		server.update(user);
+	}
+	
+	public User validateActivationLink(String activationCode)
+	{
+		EbeanServer server = Ebean.getDefaultServer();
+		User user= server.find(User.class).where().eq("emailVerificationToken", activationCode).eq("verified", false).findOne();
+		return user;
 	}
 	
 }

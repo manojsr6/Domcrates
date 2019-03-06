@@ -191,5 +191,9 @@ public class HomeController extends Controller {
 		   return ok(Json.toJson(true));
 	   }
    }
+   
+   public Result validateActivationCode(String activationCode) throws SQLException, InterruptedException, ExecutionException, IOException, ParseException{
+	   return ok(Json.toJson(userservice.validateActivationCode(activationCode)));
+   }
 
   }
