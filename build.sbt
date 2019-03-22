@@ -10,6 +10,7 @@ crossScalaVersions := Seq("2.11.12", "2.12.4")
 
 libraryDependencies += guice
 
+
 // Test Database
 libraryDependencies += "com.h2database" % "h2" % "1.4.197"
 
@@ -23,12 +24,16 @@ libraryDependencies +="org.mindrot" % "jbcrypt" % "0.3m"
 libraryDependencies += "com.typesafe.play" %% "play-mailer" % "6.0.0"
 libraryDependencies += "com.typesafe.play" %% "play-mailer-guice" % "6.0.0"
 libraryDependencies += "com.sendgrid" % "sendgrid-java" % "4.3.0"
+libraryDependencies += "com.google.firebase" % "firebase-admin" % "6.7.0"
+libraryDependencies += "com.currencyfair" % "onesignal" % "1.0.10"
 libraryDependencies ++= Seq(
   ws
 )
 libraryDependencies ++= Seq(evolutions, jdbc)
 
 libraryDependencies += "com.auth0" % "java-jwt" % "3.7.0"
+
+
 
 
 // Make verbose tests

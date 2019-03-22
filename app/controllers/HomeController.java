@@ -69,7 +69,6 @@ public class HomeController extends Controller {
 		   return badRequest("Expected proper json data");
 	   }
 	   User user1= Json.fromJson(json_node,User.class);
-	   System.out.println("after return statement");
 	   ArrayList<String> userList= new ArrayList<>();
 	   userList.add("Vijilin");
 	   userList.add("Manoj");
@@ -141,7 +140,6 @@ public class HomeController extends Controller {
    }
    
    public Result fetchWatchList(int id, int offset, int limit) throws SQLException, InterruptedException, ExecutionException, IOException, ParseException{
-	   System.out.println(id);
 	   return ok(Json.toJson(watchListService.fetchWatchListById(id, offset, limit)));
    }
    

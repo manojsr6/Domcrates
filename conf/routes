@@ -5,22 +5,23 @@
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
 POST 	/findByEmail				controllers.HomeController.findByEmail
-POST  /api/1.0/portal/mobile/create_user controllers.HomeController.createUser
-GET  /api/1.0/portal/mobile/fetch_domain/:offset/:limit  controllers.HomeController.fetchDomain(offset:Integer,limit:Integer)
-POST  /api/1.0/portal/mobile/add_watchList    controllers.HomeController.addDomain
-GET  /api/1.0/portal/mobile/fetch_watchList/:id/:offset/:limit		controllers.HomeController.fetchWatchList(id: Integer, offset:Integer,limit:Integer)
-PUT  /api/1.0/portal/mobile/forgotPasswordLink			controllers.HomeController.forgotPasswordLink
-GET  /api/1.0/portal/mobile/forgotPasswordLinkValidation/:forgotPasswordToken  controllers.HomeController.validateforgotPasswordLink(forgotPasswordToken:String)
-POST  /api/1.0/portal/mobile/resetPassword				controllers.HomeController.resetPassword()
-POST /api/1.0/portal/mobile/changePassword				controllers.HomeController.changePassword()
-GET  /api/1.0/portal/mobile/validateActivationCode/:activationCode controllers.HomeController.validateActivationCode(activationCode:String)
+POST  	/api/1.0/portal/mobile/create_user controllers.HomeController.createUser
+GET  	/api/1.0/portal/mobile/fetch_domain/:offset/:limit  controllers.HomeController.fetchDomain(offset:Integer,limit:Integer)
+POST  	/api/1.0/portal/mobile/add_watchList    controllers.HomeController.addDomain
+GET  	/api/1.0/portal/mobile/fetch_watchList/:id/:offset/:limit		controllers.HomeController.fetchWatchList(id: Integer, offset:Integer,limit:Integer)
+PUT  	/api/1.0/portal/mobile/forgotPasswordLink			controllers.HomeController.forgotPasswordLink
+GET  	/api/1.0/portal/mobile/forgotPasswordLinkValidation/:forgotPasswordToken  controllers.HomeController.validateforgotPasswordLink(forgotPasswordToken:String)
+POST  	/api/1.0/portal/mobile/resetPassword				controllers.HomeController.resetPassword()
+POST 	/api/1.0/portal/mobile/changePassword				controllers.HomeController.changePassword()
+GET  	/api/1.0/portal/mobile/validateActivationCode/:activationCode controllers.HomeController.validateActivationCode(activationCode:String)
+
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
 GET     /message                    controllers.AsyncController.message
 
 +noJwtFilter
-POST     /login                     controllers.OauthController.login()
+POST     /api/1.0/portal/mobile/login                     controllers.OauthController.login()
 GET 	/requires-jwt				controllers.OauthController.requiresJwt
 
 

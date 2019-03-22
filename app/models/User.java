@@ -42,7 +42,19 @@ public class User extends Model {
 	@Column(nullable = true)
 	private  String emailVerificationToken;
 	
+	@Column(nullable = true)
+	private String user_deviceId;
 	
+
+	public String getUser_deviceId() {
+		return user_deviceId;
+	}
+
+	
+	public void setUser_deviceId(String user_deviceId) {
+		this.user_deviceId = user_deviceId;
+	}
+
 	public String getEmailVerificationToken() {
 		return emailVerificationToken;
 	}

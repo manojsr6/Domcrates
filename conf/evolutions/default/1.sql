@@ -40,6 +40,7 @@ create table user (
   verified                      tinyint(1) not null,
   forgot_password_token         varchar(255),
   email_verification_token      varchar(255),
+  user_device_id                varchar(255),
   constraint uq_user_primary_email unique (primary_email),
   constraint pk_user primary key (user_id)
 );

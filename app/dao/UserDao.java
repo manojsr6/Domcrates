@@ -77,7 +77,6 @@ public class UserDao {
 		{
 			TestEbean testbean= new TestEbean();
 			testbean.name=nameList.get(i);
-			System.out.println(testbean.name);
 			server.save(testbean);
 		}
 	}
