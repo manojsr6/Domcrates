@@ -295,4 +295,9 @@ public class UserService{
 			return false;
 	}
 	
+	public int deleteAccount(String email)
+	{
+		return userdao.deleteUser(email);
+	}
+	
 }

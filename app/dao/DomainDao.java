@@ -16,6 +16,7 @@ import io.ebean.RawSqlBuilder;
 import io.ebean.SqlRow;
 import models.Domain;
 import models.DomainResponse;
+import models.User;
 
 public class DomainDao {
 	/**
@@ -58,5 +59,11 @@ public class DomainDao {
 			domainList.add(response_record);
 		}
 		return domainList;
+	}
+	
+	public int deleteDomain(String email)
+	{
+		EbeanServer server = Ebean.getDefaultServer();
+		return server.find(Domain.class).where().eq("registered_email", email).delete();
 	}
 }

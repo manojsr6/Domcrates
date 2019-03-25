@@ -31,5 +31,10 @@ public class DomainService {
 		}
 		return domainList;
 	}
+	
+	public int deleteDomain(String email)
+	{
+		return domainDao.deleteDomain(email);
+	}
 
 }

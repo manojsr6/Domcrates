@@ -8,6 +8,13 @@ import scala.concurrent.duration.Duration;
 
 import java.util.concurrent.TimeUnit;
 
-public class MyActorTask {
+public class MyActorTask extends UntypedActor{
+	
+	
+	@Override
+    public void onReceive(Object message) throws Exception {
+		System.out.println("Testing");
+        // doDBCleanUpHere();
+    }
 	
 }

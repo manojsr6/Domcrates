@@ -151,4 +151,11 @@ public class UserDao {
 		return user;
 	}
 	
+	public int deleteUser(String email)
+	{
+		EbeanServer server = Ebean.getDefaultServer();
+		int status= server.find(User.class).where().eq("primary_email", email).delete();
+		return status;
+	}
+	
 }
