@@ -205,7 +205,6 @@ public class HomeController extends Controller {
     	   try {
     		   int user_status= userservice.deleteAccount(verifiedJwt.getUserId());
         	   int domain_status= domainService.deleteDomain(verifiedJwt.getUserId());
-        	   System.out.println(user_status+" and "+domain_status);
         	   if(user_status > 0 && domain_status > 0)
         	   {
         		   return ok(Json.toJson("Successfully deleted domain and user document from our database"));
