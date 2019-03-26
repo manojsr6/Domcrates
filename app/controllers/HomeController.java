@@ -196,29 +196,31 @@ public class HomeController extends Controller {
    
    
    public Result deleteAccount() throws SQLException, InterruptedException, ExecutionException, IOException, ParseException{
-	   return jwtControllerHelper.verify(request(), res -> {
-           if (res.left.isPresent()) {
-               return forbidden(res.left.get().toString());
-           }
-           VerifiedJwt verifiedJwt = res.right.get();
-           Logger.debug("{}", verifiedJwt);
-    	   try {
-    		   int user_status= userservice.deleteAccount(verifiedJwt.getUserId());
-        	   int domain_status= domainService.deleteDomain(verifiedJwt.getUserId());
-        	   if(user_status > 0 && domain_status > 0)
-        	   {
-        		   return ok(Json.toJson("Successfully deleted domain and user document from our database"));
-        	   }
-        	   else
-        	   {
-        		   return ok(Json.toJson("Could not delete the domain and user document from our database..due to some error."));
-        	   }
-    	   } catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-    	   return forbidden();
-       });
+System.out.println("Inside delete method.......");
+return ok(Json.toJson("Inside delete method in controller......"));
+	   //	   return jwtControllerHelper.verify(request(), res -> {
+//           if (res.left.isPresent()) {
+//               return forbidden(res.left.get().toString());
+//           }
+//           VerifiedJwt verifiedJwt = res.right.get();
+//           Logger.debug("{}", verifiedJwt);
+//    	   try {
+//    		   int user_status= userservice.deleteAccount(verifiedJwt.getUserId());
+//        	   int domain_status= domainService.deleteDomain(verifiedJwt.getUserId());
+//        	   if(user_status > 0 && domain_status > 0)
+//        	   {
+//        		   return ok(Json.toJson("Successfully deleted domain and user document from our database"));
+//        	   }
+//        	   else
+//        	   {
+//        		   return ok(Json.toJson("Could not delete the domain and user document from our database..due to some error."));
+//        	   }
+//    	   } catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} 
+//    	   return forbidden();
+//       });
    }
    
    
